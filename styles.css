@@ -1,0 +1,56 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gameboard {
+  font-size: 3em;
+  width: 50%;
+  height: 50%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(3, minmax(auto, 1fr));
+}
+
+.gameboard-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(auto, 1fr));
+}
+
+.file {
+  border: 3px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#position-1,
+#position-2,
+#position-3 {
+  border-top: none;
+}
+
+#position-3,
+#position-6,
+#position-9 {
+  border-right: none;
+}
+
+#position-7,
+#position-8,
+#position-9 {
+  border-bottom: none;
+}
+
+#position-1,
+#position-4,
+#position-7 {
+  border-left: none;
+}
