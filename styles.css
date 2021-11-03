@@ -54,3 +54,15 @@ main {
 #position-7 {
   border-left: none;
 }
+
+#position-1:hover,
+#position-2:hover,
+#position-3:hover,
+#position-4:hover,
+#position-5:hover,
+#position-6:hover,
+#position-7:hover,
+#position-8:hover,
+#position-9:hover {
+  background-color: cadetblue;
+}
