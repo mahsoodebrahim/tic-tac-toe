@@ -1,5 +1,4 @@
 const game = ((doc) => {
-  const positionsRemaining = 9; // TODO: need to handle this counter
   const gameboard = [null, null, null, null, null, null, null, null, null];
   const _addedMarterToGameboard = true;
   const _cannotAddMarkerToGameboard = false;
@@ -40,7 +39,11 @@ const game = ((doc) => {
     });
   };
 
-  const isGameOver = () => {
+  const _isTie = () => {
+    return gameboard.every((position) => position !== null);
+  };
+
+  const _isThreeInARowPresent = () => {
     for (const winningCombination of _winningConditions) {
       const postitionI = winningCombination[0] - 1;
       const postitionII = winningCombination[1] - 1;
@@ -60,6 +63,10 @@ const game = ((doc) => {
       }
     }
     return false; // TODO: return object with marker as null
+  };
+
+  const isGameOver = () => {
+    return _isTie() || _isThreeInARowPresent();
   };
 
   return {
