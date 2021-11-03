@@ -1,15 +1,22 @@
 const game = ((doc) => {
+  const positionsRemaining = 9; // TODO: need to handle this counter
   const gameboard = [null, null, null, null, null, null, null, null, null];
   const _addedMarterToGameboard = true;
   const _cannotAddMarkerToGameboard = false;
+  const _winningConditions = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+    [1, 4, 7],
+    [2, 5, 8],
+    [3, 6, 9],
+    [1, 5, 9],
+    [3, 5, 7],
+  ];
 
   const hasDocumentObj = () => {
     return !!doc && querySelector in doc;
   };
-
-  // const isPositionEmpty = (position) => {
-  //   return gameboard[position-1] === null
-  // };
 
   const canAddToPosition = (position) => {
     return gameboard[position - 1] === null;
@@ -33,10 +40,32 @@ const game = ((doc) => {
     });
   };
 
+  const isGameOver = () => {
+    for (const winningCombination of _winningConditions) {
+      const postitionI = winningCombination[0] - 1;
+      const postitionII = winningCombination[1] - 1;
+      const postitionIII = winningCombination[2] - 1;
+
+      if (
+        gameboard[postitionI] !== null &&
+        gameboard[postitionII] !== null &&
+        gameboard[postitionIII] !== null
+      ) {
+        if (
+          gameboard[postitionI] === gameboard[postitionII] &&
+          gameboard[postitionI] === gameboard[postitionIII]
+        ) {
+          return true; // TODO: return object with marker
+        }
+      }
+    }
+    return false; // TODO: return object with marker as null
+  };
+
   return {
-    gameboard,
     addMarkerAtPosition,
     updateBoard,
+    isGameOver,
   };
 })(document);
 
@@ -53,11 +82,11 @@ const boardPositions = document.querySelectorAll(".file");
 boardPositions.forEach((boardPosition) => {
   boardPosition.addEventListener("click", (e) => {
     const positionNumber = parseInt(e.target.id.slice(-1));
-    console.log(positionNumber);
+    // console.log(positionNumber);
     game.addMarkerAtPosition("P", positionNumber);
-    // console.log(game.gameboard);
     game.updateBoard();
+    if (game.isGameOver()) {
+      console.log("GAME OVER");
+    }
   });
 });
-
-console.log(game.gameboard);
