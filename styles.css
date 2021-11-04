@@ -3,6 +3,53 @@ body {
   padding: 0;
 }
 
+/* Form Styles */
+
+.intro {
+  font-size: 2em;
+  text-align: center;
+}
+
+form {
+  font-size: 3em;
+}
+
+.info {
+  margin: 1em auto;
+}
+
+.player {
+  display: block;
+  margin-bottom: 15px;
+}
+
+input[type="text"] {
+  padding: 1em 2em;
+  font-size: 18px;
+  position: relative;
+  bottom: 0.5em;
+}
+
+[for$="marker"] {
+  margin-left: 1em;
+}
+
+[type="button"] {
+  width: 50%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background: rgb(22, 220, 167);
+  font-size: 0.75em;
+  cursor: pointer;
+}
+
+[type="button"]:hover {
+  color: white;
+}
+
+/* Main Styles */
+
 main {
   height: 100vh;
   display: flex;
@@ -71,4 +118,12 @@ main {
 #commentary {
   margin-top: 2em;
   font-size: 3em;
+}
+
+/* Initial State */
+
+/* .hide */
+.gameboard,
+#commentary {
+  display: none;
 }

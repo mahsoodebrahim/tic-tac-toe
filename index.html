@@ -11,6 +11,25 @@
 
 <body>
   <main>
+    <form>
+      <div class="intro">Tic Tac Toe</div>
+      <div class="info">
+        <label class="player">Player 1:</label>
+        <label for="player1-name">Name:</label>
+        <input type="text" id="player1-name" name="player1-name">
+        <label for="player1-marker">Marker:</label>
+        <input type="text" id="player1-marker" name="player1-marker">
+      </div>
+      <div class="info">
+        <label class="player">Player 2:</label>
+        <label for="player2-name">Name:</label>
+        <input type="text" id="player2-name" name="player2-name">
+        <label for="player2-marker">Marker:</label>
+        <input type="text" id="player2-marker" name="player2-marker">
+      </div>
+      <input type="button" id="play-game" value="Start">
+    </form>
+
     <div class="gameboard">
       <div class="gameboard-row" id="row1">
         <div class="file" id="position-1">x</div>
