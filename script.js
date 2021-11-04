@@ -1,4 +1,4 @@
-const game = ((doc) => {
+const game = (() => {
   const gameboard = [null, null, null, null, null, null, null, null, null];
   const _addedMarterToGameboard = true;
   const _cannotAddMarkerToGameboard = false;
@@ -13,30 +13,17 @@ const game = ((doc) => {
     [3, 5, 7],
   ];
 
-  const hasDocumentObj = () => {
-    return !!doc && querySelector in doc;
-  };
-
   const canAddToPosition = (position) => {
     return gameboard[position - 1] === null;
   };
 
   const addMarkerAtPosition = (marker, position) => {
-    if (!hasDocumentObj || !canAddToPosition(position)) {
+    if (!canAddToPosition(position)) {
       return _cannotAddMarkerToGameboard;
     }
 
     gameboard[position - 1] = marker;
     return _addedMarterToGameboard;
-  };
-
-  const updateBoard = () => {
-    if (!hasDocumentObj) return;
-
-    gameboard.forEach((marker, position) => {
-      doc.querySelector(`#position-${position + 1}`).innerHTML =
-        marker === null ? "" : marker;
-    });
   };
 
   const _isTie = () => {
@@ -70,11 +57,24 @@ const game = ((doc) => {
   };
 
   return {
+    gameboard,
     addMarkerAtPosition,
-    updateBoard,
     isGameOver,
   };
-})(document);
+})();
+
+const displayController = ((doc, gameboard) => {
+  const updateBoard = () => {
+    gameboard.forEach((marker, position) => {
+      doc.querySelector(`#position-${position + 1}`).innerHTML =
+        marker === null ? "" : marker;
+    });
+  };
+
+  return {
+    updateBoard,
+  };
+})(document, game.gameboard);
 
 const Player = (marker) => {
   const playerName = `Player ${marker}`;
@@ -85,15 +85,30 @@ const Player = (marker) => {
   };
 };
 
+const playTurn = (event) => {
+  const positionNumber = parseInt(event.target.id.slice(-1));
+
+  game.addMarkerAtPosition(currentPlayerMarker, positionNumber); // TODO: this returns weathher or not the marker was placed
+
+  displayController.updateBoard();
+
+  if (game.isGameOver()) {
+    console.log("GAME OVER");
+  }
+};
+
+const playerOne = Player("X");
+const playerTwo = Player("O");
+let currentPlayerMarker = playerOne.playerMarker;
+
 const boardPositions = document.querySelectorAll(".file");
+
 boardPositions.forEach((boardPosition) => {
   boardPosition.addEventListener("click", (e) => {
-    const positionNumber = parseInt(e.target.id.slice(-1));
-    // console.log(positionNumber);
-    game.addMarkerAtPosition("P", positionNumber);
-    game.updateBoard();
-    if (game.isGameOver()) {
-      console.log("GAME OVER");
-    }
+    playTurn(e, currentPlayerMarker);
+    currentPlayerMarker =
+      currentPlayerMarker === playerOne.playerMarker
+        ? playerTwo.playerMarker
+        : playerOne.playerMarker;
   });
 });
