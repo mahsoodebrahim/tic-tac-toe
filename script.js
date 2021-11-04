@@ -26,7 +26,7 @@ const game = (() => {
     return _addedMarterToGameboard;
   };
 
-  const _isTie = () => {
+  const isTie = () => {
     return gameboard.every((position) => position !== null);
   };
 
@@ -53,12 +53,13 @@ const game = (() => {
   };
 
   const isGameOver = () => {
-    return _isTie() || _isThreeInARowPresent();
+    return isTie() || _isThreeInARowPresent();
   };
 
   return {
     gameboard,
     addMarkerAtPosition,
+    isTie,
     isGameOver,
   };
 })();
@@ -85,6 +86,8 @@ const Player = (name, marker) => {
   };
 };
 
+let currentPlayer;
+
 function startGame() {
   const playerOne = Player(
     document.getElementById("player1-name").value,
@@ -94,7 +97,7 @@ function startGame() {
     document.getElementById("player2-name").value,
     document.getElementById("player2-marker").value
   );
-  let currentPlayer = playerOne;
+  currentPlayer = playerOne;
 
   const commentary = document.getElementById("commentary");
   commentary.innerHTML = `${currentPlayer.playerName}, Let's Start!`;
@@ -112,23 +115,34 @@ function startGame() {
       );
 
       if (addedMarker) {
+        // Update the board
+        displayController.updateBoard();
+
+        // Check if a winner or a tie
+        if (game.isGameOver()) {
+          endGame();
+          return;
+        }
         // Change marker for next turn
         currentPlayer =
           currentPlayer.playerMarker === playerOne.playerMarker
             ? playerTwo
             : playerOne;
 
-        displayController.updateBoard();
         commentary.innerHTML = `${currentPlayer.playerName}'s Turn`;
-        if (game.isGameOver()) {
-          console.log("GAME OVER"); // TODO: Need to determine if game is tied or won
-        }
       } else {
-        console.log("cant pick that spot");
         commentary.innerHTML = `Can't pick that spot, try again!`;
       }
     });
   });
+}
+
+function endGame() {
+  if (game.isTie()) {
+    commentary.innerHTML = `Tie Game`;
+  } else {
+    commentary.innerHTML = `${currentPlayer.playerName} Wins!`;
+  }
 }
 
 const startBtn = document.getElementById("start-game");
