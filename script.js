@@ -105,8 +105,6 @@ function startGame() {
   const boardPositions = document.querySelectorAll(".file");
   boardPositions.forEach((boardPosition) => {
     boardPosition.addEventListener("click", (e) => {
-      // commentary.innerHTML = `${currentPlayer.playerName}'s Turn'`;
-
       const positionNumber = parseInt(e.target.id.slice(-1));
 
       const addedMarker = game.addMarkerAtPosition(
@@ -130,7 +128,7 @@ function startGame() {
             : playerOne;
 
         commentary.innerHTML = `${currentPlayer.playerName}'s Turn`;
-      } else {
+      } else if (!game.isGameOver()) {
         commentary.innerHTML = `Can't pick that spot, try again!`;
       }
     });
