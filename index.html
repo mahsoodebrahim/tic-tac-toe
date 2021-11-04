@@ -11,8 +11,8 @@
 
 <body>
   <main>
-    <form>
-      <div class="intro">Tic Tac Toe</div>
+    <form id="intro">
+      <div class="title">Tic Tac Toe</div>
       <div class="info">
         <label class="player">Player 1:</label>
         <label for="player1-name">Name:</label>
@@ -27,10 +27,10 @@
         <label for="player2-marker">Marker:</label>
         <input type="text" id="player2-marker" name="player2-marker">
       </div>
-      <input type="button" id="play-game" value="Start">
+      <input type="button" id="start-game" value="Start">
     </form>
 
-    <div class="gameboard">
+    <div class="gameboard hide">
       <div class="gameboard-row" id="row1">
         <div class="file" id="position-1">x</div>
         <div class="file" id="position-2">o</div>
@@ -49,7 +49,7 @@
       </div>
     </div>
 
-    <div id="commentary"></div>
+    <div class="hide" id="commentary"></div>
   </main>
 
   <script src="./script.js"></script>

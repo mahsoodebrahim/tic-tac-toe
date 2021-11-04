@@ -76,8 +76,8 @@ const displayController = ((doc, gameboard) => {
   };
 })(document, game.gameboard);
 
-const Player = (marker) => {
-  const playerName = `Player ${marker}`;
+const Player = (name, marker) => {
+  const playerName = name;
   const playerMarker = marker;
   return {
     playerMarker,
@@ -85,55 +85,60 @@ const Player = (marker) => {
   };
 };
 
-// const endGame() => {
+function startGame() {
+  const playerOne = Player(
+    document.getElementById("player1-name").value,
+    document.getElementById("player1-marker").value
+  );
+  const playerTwo = Player(
+    document.getElementById("player2-name").value,
+    document.getElementById("player2-marker").value
+  );
+  let currentPlayer = playerOne;
 
-// }
-// const playTurn = (event) => {
-//   const positionNumber = parseInt(event.target.id.slice(-1));
+  const commentary = document.getElementById("commentary");
+  commentary.innerHTML = `${currentPlayer.playerName}, Let's Start!`;
 
-//   game.addMarkerAtPosition(currentPlayerMarker, positionNumber); // TODO: this returns weathher or not the marker was placed
+  const boardPositions = document.querySelectorAll(".file");
+  boardPositions.forEach((boardPosition) => {
+    boardPosition.addEventListener("click", (e) => {
+      // commentary.innerHTML = `${currentPlayer.playerName}'s Turn'`;
 
-//   displayController.updateBoard();
+      const positionNumber = parseInt(e.target.id.slice(-1));
 
-//   if (game.isGameOver()) {
-//     console.log("GAME OVER");
-//   }
-// };
+      const addedMarker = game.addMarkerAtPosition(
+        currentPlayer.playerMarker,
+        positionNumber
+      );
 
-const playerOne = Player("X");
-const playerTwo = Player("O");
-let currentPlayer = playerOne;
+      if (addedMarker) {
+        // Change marker for next turn
+        currentPlayer =
+          currentPlayer.playerMarker === playerOne.playerMarker
+            ? playerTwo
+            : playerOne;
 
-const commentary = document.getElementById("commentary");
-commentary.innerHTML = `${currentPlayer.playerName}, Let's Start!`;
-
-const boardPositions = document.querySelectorAll(".file");
-
-boardPositions.forEach((boardPosition) => {
-  boardPosition.addEventListener("click", (e) => {
-    // commentary.innerHTML = `${currentPlayer.playerName}'s Turn'`;
-
-    const positionNumber = parseInt(e.target.id.slice(-1));
-
-    const addedMarker = game.addMarkerAtPosition(
-      currentPlayer.playerMarker,
-      positionNumber
-    );
-
-    if (addedMarker) {
-      // Change marker for next turn
-      currentPlayer =
-        currentPlayer.playerMarker === playerOne.playerMarker
-          ? playerTwo
-          : playerOne;
-
-      displayController.updateBoard();
-      commentary.innerHTML = `${currentPlayer.playerName}'s Turn`;
-      if (game.isGameOver()) {
-        console.log("GAME OVER"); // TODO: Need to determine if game is tied or won
+        displayController.updateBoard();
+        commentary.innerHTML = `${currentPlayer.playerName}'s Turn`;
+        if (game.isGameOver()) {
+          console.log("GAME OVER"); // TODO: Need to determine if game is tied or won
+        }
+      } else {
+        console.log("cant pick that spot");
       }
-    } else {
-      console.log("cant pick that spot");
-    }
+    });
   });
+}
+
+const startBtn = document.getElementById("start-game");
+startBtn.addEventListener("click", () => {
+  // Remove hidden elements
+  document.querySelectorAll(".hide").forEach((element) => {
+    element.classList.remove("hide");
+  });
+
+  // hide intro
+  document.getElementById("intro").classList.add("hide");
+
+  startGame();
 });
