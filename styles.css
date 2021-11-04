@@ -6,6 +6,7 @@ body {
 main {
   height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -65,4 +66,9 @@ main {
 #position-8:hover,
 #position-9:hover {
   background-color: cadetblue;
+}
+
+#commentary {
+  margin-top: 2em;
+  font-size: 3em;
 }

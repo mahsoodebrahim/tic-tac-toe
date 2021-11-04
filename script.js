@@ -85,30 +85,55 @@ const Player = (marker) => {
   };
 };
 
-const playTurn = (event) => {
-  const positionNumber = parseInt(event.target.id.slice(-1));
+// const endGame() => {
 
-  game.addMarkerAtPosition(currentPlayerMarker, positionNumber); // TODO: this returns weathher or not the marker was placed
+// }
+// const playTurn = (event) => {
+//   const positionNumber = parseInt(event.target.id.slice(-1));
 
-  displayController.updateBoard();
+//   game.addMarkerAtPosition(currentPlayerMarker, positionNumber); // TODO: this returns weathher or not the marker was placed
 
-  if (game.isGameOver()) {
-    console.log("GAME OVER");
-  }
-};
+//   displayController.updateBoard();
+
+//   if (game.isGameOver()) {
+//     console.log("GAME OVER");
+//   }
+// };
 
 const playerOne = Player("X");
 const playerTwo = Player("O");
-let currentPlayerMarker = playerOne.playerMarker;
+let currentPlayer = playerOne;
+
+const commentary = document.getElementById("commentary");
+commentary.innerHTML = `${currentPlayer.playerName}, Let's Start!`;
 
 const boardPositions = document.querySelectorAll(".file");
 
 boardPositions.forEach((boardPosition) => {
   boardPosition.addEventListener("click", (e) => {
-    playTurn(e, currentPlayerMarker);
-    currentPlayerMarker =
-      currentPlayerMarker === playerOne.playerMarker
-        ? playerTwo.playerMarker
-        : playerOne.playerMarker;
+    // commentary.innerHTML = `${currentPlayer.playerName}'s Turn'`;
+
+    const positionNumber = parseInt(e.target.id.slice(-1));
+
+    const addedMarker = game.addMarkerAtPosition(
+      currentPlayer.playerMarker,
+      positionNumber
+    );
+
+    if (addedMarker) {
+      // Change marker for next turn
+      currentPlayer =
+        currentPlayer.playerMarker === playerOne.playerMarker
+          ? playerTwo
+          : playerOne;
+
+      displayController.updateBoard();
+      commentary.innerHTML = `${currentPlayer.playerName}'s Turn`;
+      if (game.isGameOver()) {
+        console.log("GAME OVER"); // TODO: Need to determine if game is tied or won
+      }
+    } else {
+      console.log("cant pick that spot");
+    }
   });
 });
