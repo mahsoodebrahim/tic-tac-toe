@@ -125,6 +125,7 @@ function startGame() {
         }
       } else {
         console.log("cant pick that spot");
+        commentary.innerHTML = `Can't pick that spot, try again!`;
       }
     });
   });
@@ -137,7 +138,7 @@ startBtn.addEventListener("click", () => {
     element.classList.remove("hide");
   });
 
-  // hide intro
+  // Hide intro
   document.getElementById("intro").classList.add("hide");
 
   startGame();
