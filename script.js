@@ -173,7 +173,7 @@ function endGame() {
   // Show user options to play again or restart
   document.querySelector(".gameover").style.display = "flex";
 
-  // const restart = document.getElementById("restart");
+  const restart = document.getElementById("restart");
   const playAgain = document.getElementById("play-again");
 
   playAgain.addEventListener("click", () => {
@@ -184,7 +184,28 @@ function endGame() {
     // Hide user options to play again or restart
     document.querySelector(".gameover").style.display = "none";
   });
-  // playAgain
+
+  restart.addEventListener("click", () => {
+    game.resetGameboard();
+    displayController.updateBoard();
+
+    //Clear inputs for player names and markers
+    document.getElementById("player1-name").value = null;
+    document.getElementById("player1-marker").value = null;
+    document.getElementById("player2-name").value = null;
+    document.getElementById("player2-marker").value = null;
+
+    // Add hidden elements to main game elements
+    document.querySelectorAll(".game").forEach((element) => {
+      element.classList.add("hide");
+    });
+
+    // Hide user options to play again or restart
+    document.querySelector(".gameover").style.display = "none";
+
+    // Show intro
+    document.getElementById("intro").classList.remove("hide");
+  });
 }
 
 function gameIntro() {
