@@ -1,6 +1,6 @@
 const game = (() => {
   const gameboard = [null, null, null, null, null, null, null, null, null];
-  const _addedMarterToGameboard = true;
+  const _addedMarkerToGameboard = true;
   const _cannotAddMarkerToGameboard = false;
   const _winningConditions = [
     [1, 2, 3],
@@ -23,7 +23,21 @@ const game = (() => {
     }
 
     gameboard[position - 1] = marker;
-    return _addedMarterToGameboard;
+    return _addedMarkerToGameboard;
+  };
+
+  const blockRemainingPositions = () => {
+    for (let position = 0; position < gameboard.length; position++) {
+      if (gameboard[position] === null) {
+        gameboard[position] = "";
+      }
+    }
+  };
+
+  const resetGameboard = () => {
+    for (let position = 0; position < gameboard.length; position++) {
+      gameboard[position] = null;
+    }
   };
 
   const isTie = () => {
@@ -58,6 +72,8 @@ const game = (() => {
 
   return {
     gameboard,
+    blockRemainingPositions,
+    resetGameboard,
     addMarkerAtPosition,
     isTie,
     isGameOver,
@@ -87,13 +103,14 @@ const Player = (name, marker) => {
 };
 
 let currentPlayer;
+let handledBoardClicks = false;
 
 function startGame() {
-  const playerOne = Player(
+  let playerOne = Player(
     document.getElementById("player1-name").value,
     document.getElementById("player1-marker").value
   );
-  const playerTwo = Player(
+  let playerTwo = Player(
     document.getElementById("player2-name").value,
     document.getElementById("player2-marker").value
   );
@@ -102,6 +119,13 @@ function startGame() {
   const commentary = document.getElementById("commentary");
   commentary.innerHTML = `${currentPlayer.playerName}, Let's Start!`;
 
+  if (!handledBoardClicks) {
+    handleBoardClicks(playerOne, playerTwo);
+    handledBoardClicks = true;
+  }
+}
+
+function handleBoardClicks(playerOne, playerTwo) {
   const boardPositions = document.querySelectorAll(".file");
   boardPositions.forEach((boardPosition) => {
     boardPosition.addEventListener("click", (e) => {
@@ -116,11 +140,12 @@ function startGame() {
         // Update the board
         displayController.updateBoard();
 
-        // Check if a winner or a tie
+        // Check if there is a winner or if there was a tie
         if (game.isGameOver()) {
           endGame();
           return;
         }
+
         // Change marker for next turn
         currentPlayer =
           currentPlayer.playerMarker === playerOne.playerMarker
@@ -141,17 +166,40 @@ function endGame() {
   } else {
     commentary.innerHTML = `${currentPlayer.playerName} Wins!`;
   }
+
+  // Prevent user from clicking empty positions
+  game.blockRemainingPositions();
+
+  // Show user options to play again or restart
+  document.querySelector(".gameover").style.display = "flex";
+
+  // const restart = document.getElementById("restart");
+  const playAgain = document.getElementById("play-again");
+
+  playAgain.addEventListener("click", () => {
+    game.resetGameboard();
+    displayController.updateBoard();
+    startGame();
+
+    // Hide user options to play again or restart
+    document.querySelector(".gameover").style.display = "none";
+  });
+  // playAgain
 }
 
-const startBtn = document.getElementById("start-game");
-startBtn.addEventListener("click", () => {
-  // Remove hidden elements
-  document.querySelectorAll(".hide").forEach((element) => {
-    element.classList.remove("hide");
+function gameIntro() {
+  const startBtn = document.getElementById("start-game");
+  startBtn.addEventListener("click", () => {
+    // Remove hidden elements
+    document.querySelectorAll(".hide").forEach((element) => {
+      element.classList.remove("hide");
+    });
+
+    // Hide intro
+    document.getElementById("intro").classList.add("hide");
+
+    startGame();
   });
+}
 
-  // Hide intro
-  document.getElementById("intro").classList.add("hide");
-
-  startGame();
-});
+gameIntro();

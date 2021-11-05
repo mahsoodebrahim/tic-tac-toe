@@ -120,6 +120,14 @@ main {
   font-size: 3em;
 }
 
+.gameover {
+  margin-top: 2em;
+  width: 30%;
+  display: none;
+  gap: 1em;
+  font-size: 2em;
+}
+
 /* Initial State */
 
 .hide {
